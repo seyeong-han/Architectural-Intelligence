@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-airemodeler-dev-12d56-authRole",
+      "UnauthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-12d56-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-12d56-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-airemodeler-dev-12d56-deployment",
+      "UnauthRoleName": "amplify-airemodeler-dev-12d56-unauthRole",
+      "StackName": "amplify-airemodeler-dev-12d56",
+      "StackId": "arn:aws:cloudformation:us-east-1:654654171501:stack/amplify-airemodeler-dev-12d56/6fbc9dc0-9945-11ef-881e-12f4daca7e2d",
+      "AmplifyAppId": "doh6twkwidnwa"
+    }
+  }
+}
