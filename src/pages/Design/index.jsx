@@ -36,6 +36,28 @@ const generateChatResponse = async (userPrompt) => {
   }
 };
 
+const resizeImage = (base64Data, targetWidth = 832, targetHeight = 640) => {
+  // Create temporary canvas
+  const canvas = document.createElement("canvas");
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const ctx = canvas.getContext("2d");
+
+  // Create temporary image
+  const img = new Image();
+  img.src = `data:image/png;base64,${base64Data}`;
+
+  return new Promise((resolve) => {
+    img.onload = () => {
+      // Draw image with new dimensions
+      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+      // Get resized base64
+      const resizedBase64 = canvas.toDataURL("image/png").split(",")[1];
+      resolve(resizedBase64);
+    };
+  });
+};
+
 const tools = [
   {
     id: "upload",
@@ -166,6 +188,9 @@ export default function Design() {
           throw new Error("No image selected");
         }
 
+        const base64Data = await resizeImage(
+          currentImage.base64Data.split(",")[1]
+        );
 
         let payload;
         if (intention === "inpaint") {
