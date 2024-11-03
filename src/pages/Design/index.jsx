@@ -134,24 +134,17 @@ export default function Design() {
           const chatResponse = await generateChatResponse(message);
 
           if (chatResponse?.message) {
-            const intention = chatResponse.intention;
+            const intention = chatResponse.intent;
             if (["segment", "inpaint"].includes(intention)) {
-              // Because we are using llama3.2:1b model, it sometimes returns "segment" as intention
-              let finalIntention;
               if (intention === "inpaint") {
-                if (!stageRef.current) {
+                if (!extractMask(true)) {
                   addBotMessage(
                     "Please use the brush tool to highlight the area you want to inpaint."
                   );
                   return;
                 }
               }
-              if (stageRef.current) {
-                finalIntention = "inpaint";
-              } else {
-                finalIntention = intention;
-              }
-              await generateStyle(chatResponse.message, finalIntention);
+              await generateStyle(chatResponse.message, intention);
             } else if (intention === "response") {
               // If no intention, just add a basic bot message
               addBotMessage(chatResponse.message);
