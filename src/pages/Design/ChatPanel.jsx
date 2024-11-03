@@ -1,9 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MessageCircle } from "lucide-react";
+import Lottie from "lottie-react";
 
-const ChatPanel = ({ messages, handleSendMessage }) => {
+const ChatPanel = ({ loading, messages, handleSendMessage }) => {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    const fetchLottieAnimation = async () => {
+      try {
+        const response = await fetch(
+          "https://lottie.host/224451fc-b394-427f-993b-f345d76f1600/Uf9l4QRVjF.json"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        console.log("data: ", data);
+        setAnimationData(data);
+      } catch (error) {
+        console.error("Error loading Lottie animation:", error);
+      }
+    };
+
+    fetchLottieAnimation();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,9 +60,7 @@ const ChatPanel = ({ messages, handleSendMessage }) => {
   }, [message]);
 
   return (
-    // <div className="flex-grow flex flex-col h-[40%]">
     <div className="flex flex-col h-[95%]">
-      {/* <div className="flex-grow p-4 overflow-y-auto"> */}
       <div className="flex-grow p-4 overflow-y-auto">
         <div className="space-y-4">
           {messages.map((msg, index) => (
@@ -115,6 +136,15 @@ const ChatPanel = ({ messages, handleSendMessage }) => {
               </div>
             </div>
           ))}
+          {loading && animationData && (
+            <div className="flex justify-center">
+              <Lottie
+                animationData={animationData}
+                loop={true}
+                style={{ width: 100, height: 100 }}
+              />
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
       </div>
