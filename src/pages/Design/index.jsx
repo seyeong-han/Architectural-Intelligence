@@ -45,63 +45,88 @@ export default function ChatTestPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [messages, setMessages] = useState([]);
 
-  const seed = Math.floor(Math.random() * 100) + 1;
-
-  useEffect(() => {
-    const handleFirstVisit = async () => {
-      if (isFirstVisit) {
-        await handleSendMessage("Hello");
-        setIsFirstVisit(false);
-      }
-    };
-
-    handleFirstVisit();
-    console.log("imageItems: ", imageItems);
-  }, []);
-
-  const generateStyle = async (prompt, roomType) => {
-    setLoading(true);
-    console.log("generating style...");
-  };
-
-  const addBotMessages = (messages) => {
+  const addBotMessage = useCallback((newMessage) => {
     setMessages((prevMessages) => [
       ...prevMessages,
-      ...messages.map((msg) => ({ ...msg, sender: "bot" })),
+      {
+        id: crypto.randomUUID(),
+        content: newMessage,
+        sender: "bot",
+      },
     ]);
-  };
+  }, []);
 
-  const handleSendMessage = async (message) => {
-    if (!message.trim()) return;
+  const handleSendMessage = useCallback(
+    async (message) => {
+      if (!message.trim()) return;
 
-    // Add user message to the chat
-    if (!isFirstVisit) {
-      setMessages([
-        ...messages,
-        { content: message, contentType: "PlainText", sender: "user" },
-      ]);
-    }
+      setLoading(true);
+      try {
+        // Add user message to chaturrentImageIndex, setCurrentImageIndex] = useState(0);
+  const [messages, setMessages] = useState([]);
 
-    // Send message to the chatbot
-    console.log("sending message...");
-  };
+  const addBotMessage = useCallback((newMessage) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: crypto.randomUUID(),
+        content: newMessage,
+        sender: "bot",
+      },
+    ]);
+  }, []);
+              id: crypto.randomUUID(),
+              content: message,
+              sender: "user",
+            },
+          ]);
+        }
 
-  const handleFileUpload = async (files) => {
-    const awsPaths = await Promise.all(files.map((file) => uploadImage(file)));
-    const newImages = files.map((file, index) => ({
-      imageURL: URL.createObjectURL(file),
-      file: file,
-      awsPath: awsPaths[index],
-      generated: [
-        {
-          src: URL.createObjectURL(file),
-          alt: "original image",
-        },
-      ],
-      genCurrentIndex: 0,
-      roomType: "",
-      isExample: false,
-    }));
+        console.log("imageItems: ", imageItems);
+
+        // Only generate chat response if there's an image uploaded
+        if (imageItems.length > 0) {
+          const chatResponse = await generateChatResponse(message);
+
+          console.log("chatResponse: ", chatResponse);
+
+          if (chatResponse?.message) {
+            const intention = chatResponse.intention;
+            if (["segment", "inpaint"].includes(intention)) {
+              await generateStyle(chatResponse.message, intention);
+            } else if (intention === "response") {
+              // If no intention, just add a basic bot message
+              addBotMessage(chatResponse.message);
+            } else {
+              // If no valid response, just add a basic bot message
+              addBotMessage(
+                "I couldn't understand your request. Could you please rephrase it?"
+              );
+            }
+          } else {
+            // If no images uploaded, prompt user to upload an image
+            addBotMessage(
+              "Please upload an image first so I can help you style it!"
+            );
+          }
+        } else {
+          // If no images uploaded, prompt user to upload an image
+          addBotMessage(
+            "Please upload an image first so I can help you style it!"
+          );
+        }
+      } catch (error) {
+        console.error("Error in message handling:", error);
+        addBotMessage(
+          "I encountered an error processing your request. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [isFirstVisit, imageItems.length, addBotMessage]
+  );
+
 
     setImageItems((prevItems) => {
       const updatedImageItems = [...prevItems, ...newImages];
