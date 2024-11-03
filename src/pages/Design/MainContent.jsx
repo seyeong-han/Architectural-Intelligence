@@ -25,8 +25,11 @@ export default function MainContent({
   currentImageIndex,
   setCurrentImageIndex,
   selectedTool,
+  stageRef,
+  linesLayerRef,
+  lines,
+  setLines,
 }) {
-  const [lines, setLines] = useState([]);
   const isDrawing = useRef(false);
   const currentImage = useImage(imageItems[currentImageIndex]?.base64Data);
 
@@ -64,6 +67,7 @@ export default function MainContent({
       <div className="flex-grow bg-white m-4 rounded-3xl shadow-md flex items-center justify-center">
         {imageItems.length > 0 && currentImage ? (
           <Stage
+            ref={stageRef}
             width={832}
             height={640}
             onMouseDown={handleMouseDown}
@@ -72,12 +76,15 @@ export default function MainContent({
           >
             <Layer>
               <Image image={currentImage} width={832} height={640} />
+            </Layer>
+
+            <Layer ref={linesLayerRef}>
               {lines.map((line, i) => (
                 <Line
                   key={i}
                   points={line.points}
                   stroke={line.tool === "eraser" ? "transparent" : "white"}
-                  strokeWidth={line.tool === "eraser" ? 20 : 5}
+                  strokeWidth={line.tool === "eraser" ? 50 : 50}
                   opacity={line.opacity}
                   globalCompositeOperation={
                     line.tool === "eraser" ? "destination-out" : "source-over"
