@@ -1,5 +1,7 @@
 # AI Remodeler
 
+[![home remodeling](public/home.png)](https://www.youtube.com/watch?v=q2TqO41XI64&feature=youtu.be&themeRefresh=1)
+
 Homeowners often struggle to visualize remodeling ideas when meeting with contractors, with traditional methods taking over three weeks to deliver mockups. AI Remodeler changes the game by generating high-quality visualizations instantly. Using advanced AI, it transforms rooms based on user prompts—whether a full style change or specific object adjustments—making it easy for customers and contractors to align on the vision.
 
 AI Remodeler brings dream homes to life faster and with greater clarity.
