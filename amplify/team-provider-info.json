@@ -1,15 +1,23 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-airemodeler-dev-12d56-authRole",
-      "UnauthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-12d56-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-12d56-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-airemodeler-dev-12d56-deployment",
-      "UnauthRoleName": "amplify-airemodeler-dev-12d56-unauthRole",
-      "StackName": "amplify-airemodeler-dev-12d56",
-      "StackId": "arn:aws:cloudformation:us-east-1:654654171501:stack/amplify-airemodeler-dev-12d56/6fbc9dc0-9945-11ef-881e-12f4daca7e2d",
-      "AmplifyAppId": "doh6twkwidnwa"
+      "AuthRoleName": "amplify-airemodeler-dev-5ce11-authRole",
+      "UnauthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-5ce11-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::654654171501:role/amplify-airemodeler-dev-5ce11-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-airemodeler-dev-5ce11-deployment",
+      "UnauthRoleName": "amplify-airemodeler-dev-5ce11-unauthRole",
+      "StackName": "amplify-airemodeler-dev-5ce11",
+      "StackId": "arn:aws:cloudformation:us-east-2:654654171501:stack/amplify-airemodeler-dev-5ce11/f2e3c050-996a-11ef-a8e1-0ab6eb412391",
+      "AmplifyAppId": "d2yqniu9mgwb3e"
+    },
+    "categories": {
+      "auth": {
+        "airemodelera81387cb": {}
+      },
+      "storage": {
+        "hacktx": {}
+      }
     }
   }
 }
