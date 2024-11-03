@@ -41,7 +41,7 @@ export default function MainContent({
       {
         tool: selectedTool,
         points: [pos.x, pos.y],
-        opacity: selectedTool === "brush" ? 0.3 : 1, // Lower opacity for brush
+        opacity: selectedTool === "brush" ? 0.3 : 1,
       },
     ]);
   };
@@ -79,20 +79,20 @@ export default function MainContent({
             </Layer>
 
             <Layer ref={linesLayerRef}>
-              {lines.map((line, i) => (
-                <Line
-                  key={i}
-                  points={line.points}
-                  stroke={line.tool === "eraser" ? "transparent" : "white"}
-                  strokeWidth={line.tool === "eraser" ? 50 : 50}
-                  opacity={line.opacity}
-                  globalCompositeOperation={
-                    line.tool === "eraser" ? "destination-out" : "source-over"
-                  }
-                  lineCap="round"
-                  lineJoin="round"
-                />
-              ))}
+              {lines
+                .filter((line) => line.tool === "brush")
+                .map((line, i) => (
+                  <Line
+                    key={i}
+                    points={line.points}
+                    stroke="white"
+                    strokeWidth={50}
+                    opacity={0.3}
+                    globalCompositeOperation="source-over"
+                    lineCap="round"
+                    lineJoin="round"
+                  />
+                ))}
             </Layer>
           </Stage>
         ) : (
