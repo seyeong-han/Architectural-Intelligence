@@ -9,6 +9,7 @@ export default function RightSidebar({
   selectedTool,
   handleToolClick,
   handleFileChange,
+  handleResetLines,
 }) {
   const fileInputRef = useRef(null);
 
@@ -16,6 +17,8 @@ export default function RightSidebar({
     handleToolClick(toolId);
     if (toolId === "upload") {
       fileInputRef.current?.click();
+    } else if (toolId === "reset") {
+      handleResetLines();
     }
   };
 
