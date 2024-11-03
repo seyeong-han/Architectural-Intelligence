@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import LeftSidebar from "./LeftSidebar";
 import MainContent from "./MainContent";
 import RightSidebar from "./RightSidebar";
@@ -80,6 +80,8 @@ const tools = [
 ];
 
 export default function Design() {
+  const stageRef = useRef(null);
+  const linesLayerRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(true);
   const [imageItems, setImageItems] = useState([]);
@@ -88,6 +90,7 @@ export default function Design() {
   const [seed] = useState(() => Math.floor(Math.random() * 100) + 1);
 
   const [selectedTool, setSelectedTool] = useState(tools[0].id);
+  const [lines, setLines] = useState([]);
 
   const handleToolClick = (toolId) => {
     setSelectedTool(toolId);
