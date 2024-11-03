@@ -178,7 +178,7 @@ export default function ChatTestPage() {
         setLoading(false);
       }
     },
-    [imageItems, currentImageIndex, seed, addBotMessage]
+    [imageItems, currentImageIndex, addBotMessage]
   );
 
   const handleFileUpload = useCallback(
