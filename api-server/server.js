@@ -75,8 +75,6 @@ app.post("/api/generate-image", async (req, res) => {
   const inputImage = body.input_image;
   const runMode = body.run_mode || "inpaint";
 
-  console.log("body: ", body);
-
   // Common payload for both inpaint and segment modes
   const commonPayload = {
     batch_size: body.batch_size || 1,
