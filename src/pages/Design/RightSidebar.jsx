@@ -3,6 +3,7 @@ import EditPanel from "./EditPanel";
 import ChatPanel from "./ChatPanel";
 
 export default function RightSidebar({
+  loading,
   activeTab,
   setActiveTab,
   messages,
@@ -32,7 +33,11 @@ export default function RightSidebar({
       {activeTab === "edit" ? (
         <EditPanel />
       ) : (
-        <ChatPanel messages={messages} handleSendMessage={handleSendMessage} />
+        <ChatPanel
+          loading={loading}
+          messages={messages}
+          handleSendMessage={handleSendMessage}
+        />
       )}
     </div>
   );
