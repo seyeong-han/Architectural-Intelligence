@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# AI Remodeler
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Homeowners often struggle to visualize remodeling ideas when meeting with contractors, with traditional methods taking over three weeks to deliver mockups. AI Remodeler changes the game by generating high-quality visualizations instantly. Using advanced AI, it transforms rooms based on user prompts—whether a full style change or specific object adjustments—making it easy for customers and contractors to align on the vision.
 
-## Available Scripts
+AI Remodeler brings dream homes to life faster and with greater clarity.
 
-In the project directory, you can run:
+## Bridging the Gap Between Homeowners and Contractors
 
-### `npm start`
+AI Remodeler transforms user prompts into high-quality, realistic remodel visualizations in minutes. Here’s how it works:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. User Prompt: Homeowners simply describe their remodeling vision, such as “modernize the kitchen” or “replace sofa with a sectional.”
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Intention Analysis: Our AI determines if the prompt requires a full-room style transformation or specific object changes (inpainting).
 
-### `npm test`
+3. Enhanced Prompt Generation: Using Llama, AI Remodeler refines the prompt for optimal image generation, adding style details or specifying objects as needed.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. Image Transformation: Leveraging advanced image-to-image and inpainting models, the AI remodels the image, capturing the homeowner’s vision accurately.
 
-### `npm run build`
+5. Instant Visualization: The transformed image is ready within minutes, giving homeowners and contractors a shared, clear visual to guide the project.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Get Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Install Ollama API
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+curl -fsSL https://ollama.com/install.sh | sh
+ollama run llama3.2
+```
 
-### `npm run eject`
+### Install StableDiffusion-Webui
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Followo [official documentation](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-NVidia-GPUs)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Start React App
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Start Node server
 
-## Learn More
+```
+cd api-server
+node server.js
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Key components of our tech stack include:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Stable Diffusion & Custom Inpainting Models: These enable realistic style changes and object replacements within images, ensuring precision and lifelike detail.
+2. Llama (NLP): Processes and enriches user prompts, intelligently guiding the AI to capture the desired remodeling style or specific adjustments.
+3. React & Node.js: Form the backbone of our web application, providing a responsive, user-friendly interface for homeowners and contractors alike.
+4. Docker: Facilitate seamless deployment and scaling of our AI models, ensuring reliability even under high demand.
