@@ -61,6 +61,9 @@ const ChatPanel = ({ loading, messages, handleSendMessage }) => {
 
   return (
     <div className="flex flex-col h-[95%]">
+      <h3 className="text-sm font-medium text-gray-700 mb-3 p-4">
+        AI Designer
+      </h3>
       <div className="flex-grow p-4 overflow-y-auto">
         <div className="space-y-4">
           {messages.map((msg, index) => (
