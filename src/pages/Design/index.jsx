@@ -3,9 +3,38 @@ import React, { useState, useEffect } from "react";
 import LeftSidebar from "./LeftSidebar";
 import MainContent from "./MainContent";
 import RightSidebar from "./RightSidebar";
+import axios from "axios";
 
-const uploadImage = async (file) => {
-  console.log("uploading image...");
+const INITIAL_MESSAGE = "Hello";
+const API_BASE_URL = "http://localhost:5000/api";
+
+const generateChatResponse = async (userPrompt) => {
+  try {
+    const { data } = await axios.post(`${API_BASE_URL}/generate`, {
+      model: "llama3.2",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a virtual assistant specializing in home remodeling and design. Your role is to understand the user's requests and respond accordingly. " +
+            "Based on the user's input, determine one of the following intentions: " +
+            "- 'segment' if the user is looking to generate a new room style or overall aesthetic. " +
+            "- 'inpaint' if the user wants to modify or replace a specific item or area within the existing space. " +
+            "- 'response' if the user is asking a general question, engaging in conversation, or needs clarification. " +
+            'Your response should always be in JSON format as follows: { "intention": "<intention>", "message": "<response text that addresses the user\'s request>" }. ' +
+            "Keep your response concise and under 50 words, focusing on clear, specific suggestions or answers.",
+        },
+        { role: "user", content: userPrompt },
+      ],
+      stream: false,
+    });
+    console.log("data: ", data);
+
+    return JSON.parse(data.message.content);
+  } catch (error) {
+    console.error("Error communicating with chat API:", error);
+    throw new Error("Failed to generate chat response");
+  }
 };
 
 export default function ChatTestPage() {
