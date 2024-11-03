@@ -198,7 +198,7 @@ export default function Design() {
           payload = {
             prompt,
             input_image: base64Data,
-            mask_image: extractMask(),
+            mask_image: extractMask(false),
             run_mode: "inpaint",
             seed,
           };
@@ -325,7 +325,7 @@ export default function Design() {
     };
   }, [imageItems]);
 
-  const extractMask = () => {
+  const extractMask = ({ isCheck }) => {
     if (!stageRef.current) return null;
 
     const layer = linesLayerRef.current;
@@ -357,6 +357,9 @@ export default function Design() {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i] > 0 || data[i + 1] > 0 || data[i + 2] > 0) {
+        if (isCheck) {
+          return "drawn";
+        }
         data[i] = 255;
         data[i + 1] = 255;
         data[i + 2] = 255;
@@ -366,6 +369,9 @@ export default function Design() {
         data[i + 2] = 0;
       }
       data[i + 3] = 255;
+    }
+    if (isCheck) {
+      return null;
     }
     ctx.putImageData(imageData, 0, 0);
 
