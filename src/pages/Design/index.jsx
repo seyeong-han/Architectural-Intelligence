@@ -1,8 +1,8 @@
-// ChatTestPage.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import LeftSidebar from "./LeftSidebar";
 import MainContent from "./MainContent";
 import RightSidebar from "./RightSidebar";
+import { encodeBlobToBase64 } from "./imageUtils";
 import axios from "axios";
 
 const INITIAL_MESSAGE = "Hello";
@@ -44,6 +44,7 @@ export default function ChatTestPage() {
   const [imageItems, setImageItems] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [messages, setMessages] = useState([]);
+  const [seed] = useState(() => Math.floor(Math.random() * 100) + 1);
 
   const addBotMessage = useCallback((newMessage) => {
     setMessages((prevMessages) => [
@@ -62,19 +63,11 @@ export default function ChatTestPage() {
 
       setLoading(true);
       try {
-        // Add user message to chaturrentImageIndex, setCurrentImageIndex] = useState(0);
-  const [messages, setMessages] = useState([]);
-
-  const addBotMessage = useCallback((newMessage) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        id: crypto.randomUUID(),
-        content: newMessage,
-        sender: "bot",
-      },
-    ]);
-  }, []);
+        // Add user message to chat
+        if (!isFirstVisit) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
               id: crypto.randomUUID(),
               content: message,
               sender: "user",
@@ -127,7 +120,59 @@ export default function ChatTestPage() {
     [isFirstVisit, imageItems.length, addBotMessage]
   );
 
+  const generateStyle = useCallback(
+    async (prompt, intention) => {
+      setLoading(true);
 
+      try {
+        const currentImage = imageItems[currentImageIndex];
+        if (!currentImage) {
+          throw new Error("No image selected");
+        }
+
+        console.log("currentImage: ", currentImage);
+
+        const encodedImage = await encodeBlobToBase64(currentImage.imageURL);
+
+        const response = await axios.post(`${API_BASE_URL}/generate-image`, {
+          prompt,
+          input_image: encodedImage,
+          run_mode: intention,
+          seed,
+        });
+
+        console.log(response.data);
+
+        const newGeneratedImage = response.data.image
+          ? `data:image/png;base64,${response.data.image}`
+          : null;
+
+        if (!newGeneratedImage) {
+          throw new Error("No image was generated");
+        }
+
+        setImageItems((prevItems) => {
+          const newItems = [...prevItems];
+          newItems[currentImageIndex] = {
+            ...newItems[currentImageIndex],
+            generated: [
+              ...newItems[currentImageIndex].generated,
+              newGeneratedImage,
+            ],
+          };
+          return newItems;
+        });
+
+        addBotMessage("Here! We generated for you!");
+      } catch (error) {
+        console.error("Error during style generation:", error);
+        addBotMessage(`Error: ${error.message || "Failed to generate style"}`);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [imageItems, currentImageIndex, seed, addBotMessage]
+  );
 
   const handleFileUpload = useCallback(
     async (files) => {
@@ -207,8 +252,10 @@ export default function ChatTestPage() {
         setImageItems={setImageItems}
         currentImageIndex={currentImageIndex}
         setCurrentImageIndex={setCurrentImageIndex}
+        generateStyle={generateStyle}
       />
       <RightSidebar
+        loading={loading}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         messages={messages}
