@@ -249,7 +249,7 @@ export default function Design() {
         addBotMessage(`Error: ${error.message || "Failed to generate style"}`);
       } finally {
         setLoading(false);
-        setLines([]);
+        handleResetLines();
       }
     },
     [imageItems, currentImageIndex, addBotMessage]
