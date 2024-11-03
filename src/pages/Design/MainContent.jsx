@@ -29,13 +29,19 @@ export default function MainContent({
   linesLayerRef,
   lines,
   setLines,
+  setIsDrawn,
 }) {
   const isDrawing = useRef(false);
   const currentImage = useImage(imageItems[currentImageIndex]?.base64Data);
 
+  useEffect(() => {
+    setIsDrawn(true);
+  }, [isDrawing]);
+
   const handleMouseDown = (e) => {
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
+    setIsDrawn(true);
     setLines([
       ...lines,
       {
@@ -48,7 +54,7 @@ export default function MainContent({
 
   const handleMouseMove = (e) => {
     if (!isDrawing.current) return;
-
+    setIsDrawn(true);
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
     let lastLine = lines[lines.length - 1];
@@ -60,6 +66,7 @@ export default function MainContent({
 
   const handleMouseUp = () => {
     isDrawing.current = false;
+    setIsDrawn(true);
   };
 
   return (

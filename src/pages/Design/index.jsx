@@ -88,6 +88,7 @@ export default function Design() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [messages, setMessages] = useState([]);
   const [seed] = useState(() => Math.floor(Math.random() * 100) + 1);
+  const [isDrawn, setIsDrawn] = useState(false);
 
   const [selectedTool, setSelectedTool] = useState(tools[0].id);
   const [lines, setLines] = useState([]);
@@ -98,6 +99,7 @@ export default function Design() {
 
   const handleResetLines = () => {
     setLines([]);
+    setIsDrawn(false);
   };
 
   const addBotMessage = useCallback((newMessage) => {
@@ -397,6 +399,7 @@ export default function Design() {
         linesLayerRef={linesLayerRef}
         lines={lines}
         setLines={setLines}
+        setIsDrawn={setIsDrawn}
       />
       <RightSidebar
         loading={loading}
