@@ -72,10 +72,10 @@ const tools = [
     tooltip: "Draw with brush",
   },
   {
-    id: "eraser",
+    id: "reset",
     icon: Eraser,
-    name: "Eraser",
-    tooltip: "Erase parts of image",
+    name: "Reset",
+    tooltip: "Reset changes",
   },
 ];
 
@@ -94,6 +94,10 @@ export default function Design() {
 
   const handleToolClick = (toolId) => {
     setSelectedTool(toolId);
+  };
+
+  const handleResetLines = () => {
+    setLines([]);
   };
 
   const addBotMessage = useCallback((newMessage) => {
@@ -392,6 +396,7 @@ export default function Design() {
         selectedTool={selectedTool}
         handleToolClick={handleToolClick}
         handleFileChange={handleFileChange}
+        handleResetLines={handleResetLines}
       />
     </div>
   );
