@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import LeftSidebar from "./LeftSidebar";
 import MainContent from "./MainContent";
 import RightSidebar from "./RightSidebar";
-import { encodeBlobToBase64 } from "./imageUtils";
+import { Paintbrush, Upload, Eraser } from "lucide-react";
 import axios from "axios";
 
 const INITIAL_MESSAGE = "Hello";
@@ -36,14 +36,40 @@ const generateChatResponse = async (userPrompt) => {
   }
 };
 
-export default function ChatTestPage() {
+const tools = [
+  {
+    id: "upload",
+    icon: Upload,
+    name: "Upload",
+    tooltip: "Upload an image",
+  },
+  {
+    id: "brush",
+    icon: Paintbrush,
+    name: "Brush",
+    tooltip: "Draw with brush",
+  },
+  {
+    id: "eraser",
+    icon: Eraser,
+    name: "Eraser",
+    tooltip: "Erase parts of image",
+  },
+];
+
+export default function Design() {
   const [loading, setLoading] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(true);
-  const [activeTab, setActiveTab] = useState("chat");
   const [imageItems, setImageItems] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [messages, setMessages] = useState([]);
   const [seed] = useState(() => Math.floor(Math.random() * 100) + 1);
+
+  const [selectedTool, setSelectedTool] = useState(tools[0].id);
+
+  const handleToolClick = (toolId) => {
+    setSelectedTool(toolId);
+  };
 
   const addBotMessage = useCallback((newMessage) => {
     setMessages((prevMessages) => [
@@ -255,13 +281,16 @@ export default function ChatTestPage() {
         currentImageIndex={currentImageIndex}
         setCurrentImageIndex={setCurrentImageIndex}
         generateStyle={generateStyle}
+        selectedTool={selectedTool}
       />
       <RightSidebar
         loading={loading}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
         messages={messages}
         handleSendMessage={handleSendMessage}
+        tools={tools}
+        selectedTool={selectedTool}
+        handleToolClick={handleToolClick}
+        handleFileChange={handleFileChange}
       />
     </div>
   );
