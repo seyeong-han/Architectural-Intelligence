@@ -1,6 +1,22 @@
-// MainContent.js
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { Stage, Layer, Image, Line } from "react-konva";
 import Thumbnail from "./Thumbnail";
+
+const useImage = (src) => {
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    if (!src) return;
+
+    const img = new window.Image();
+    img.src = src;
+    img.onload = () => {
+      setImage(img);
+    };
+  }, [src]);
+
+  return image;
+};
 
 export default function MainContent({
   handleFileChange,
@@ -8,17 +24,70 @@ export default function MainContent({
   setImageItems,
   currentImageIndex,
   setCurrentImageIndex,
+  selectedTool,
 }) {
+  const [lines, setLines] = useState([]);
+  const isDrawing = useRef(false);
+  const currentImage = useImage(imageItems[currentImageIndex]?.base64Data);
+
+  const handleMouseDown = (e) => {
+    isDrawing.current = true;
+    const pos = e.target.getStage().getPointerPosition();
+    setLines([
+      ...lines,
+      {
+        tool: selectedTool,
+        points: [pos.x, pos.y],
+        opacity: selectedTool === "brush" ? 0.3 : 1, // Lower opacity for brush
+      },
+    ]);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDrawing.current) return;
+
+    const stage = e.target.getStage();
+    const point = stage.getPointerPosition();
+    let lastLine = lines[lines.length - 1];
+
+    lastLine.points = lastLine.points.concat([point.x, point.y]);
+    lines.splice(lines.length - 1, 1, lastLine);
+    setLines([...lines]);
+  };
+
+  const handleMouseUp = () => {
+    isDrawing.current = false;
+  };
+
   return (
     <div className="flex-grow flex flex-col">
-      {/* Image Area */}
       <div className="flex-grow bg-white m-4 rounded-3xl shadow-md flex items-center justify-center">
-        {imageItems.length > 0 ? (
-          <img
-            src={imageItems[currentImageIndex].base64Data}
-            alt="Uploaded"
-            className="max-w-full max-h-full"
-          />
+        {imageItems.length > 0 && currentImage ? (
+          <Stage
+            width={832}
+            height={640}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+          >
+            <Layer>
+              <Image image={currentImage} width={832} height={640} />
+              {lines.map((line, i) => (
+                <Line
+                  key={i}
+                  points={line.points}
+                  stroke={line.tool === "eraser" ? "transparent" : "white"}
+                  strokeWidth={line.tool === "eraser" ? 20 : 5}
+                  opacity={line.opacity}
+                  globalCompositeOperation={
+                    line.tool === "eraser" ? "destination-out" : "source-over"
+                  }
+                  lineCap="round"
+                  lineJoin="round"
+                />
+              ))}
+            </Layer>
+          </Stage>
         ) : (
           <>
             <input
@@ -26,6 +95,7 @@ export default function MainContent({
               id="file-upload"
               className="hidden"
               onChange={handleFileChange}
+              accept="image/*"
             />
             <label
               htmlFor="file-upload"
@@ -44,13 +114,12 @@ export default function MainContent({
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <p className="mt-2 text-center">Upload an image</p>
+              <p className="mt-2 text-center">Upload image(s)</p>
             </label>
           </>
         )}
       </div>
 
-      {/* Bottom Thumbnails */}
       <Thumbnail
         imageItems={imageItems}
         setCurrentImageIndex={setCurrentImageIndex}
