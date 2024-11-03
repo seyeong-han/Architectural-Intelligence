@@ -6,19 +6,19 @@ const cors = require("cors");
 const app = express();
 const PORT = 5000;
 
-app.use(express.json());
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000/design",
-//   })
-// );
-// app.use(cors());
-app.use(cors({ origin: "*" }));
-// app.use(bodyParser.json());
-// Increase the body size limit
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+// Single CORS configuration
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  maxAge: 86400,
+};
 
+app.use(cors(corsOptions));
+
+// Specific preflight for large payloads
+app.options("/api/generate-image", cors(corsOptions));
 const OLLAMA_API_URL = "http://localhost:11434";
 const STABLE_DIFFUSION_URL = "http://127.0.0.1:7860";
 const NEGATIVE_PROMPT =
