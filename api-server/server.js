@@ -70,10 +70,6 @@ app.post("/api/generate", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
-});
-
 app.post("/api/generate-image", async (req, res) => {
   const body = req.body;
   const inputImage = body.input_image;
@@ -186,4 +182,8 @@ app.post("/api/generate-image", async (req, res) => {
       .status(500)
       .json({ error: "Error communicating with Stable Diffusion API" });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Proxy server running on http://localhost:${PORT}`);
 });
