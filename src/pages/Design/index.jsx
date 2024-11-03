@@ -307,8 +307,6 @@ export default function Design() {
 
     // Create temporary canvas for mask
     const canvas = document.createElement("canvas");
-    // canvas.width = 832;
-    // canvas.height = 640;
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
