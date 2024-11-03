@@ -375,16 +375,16 @@ export default function Design() {
     }
     ctx.putImageData(imageData, 0, 0);
 
-    canvas.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "mask.png";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
+    // canvas.toBlob((blob) => {
+    //   const url = URL.createObjectURL(blob);
+    //   const a = document.createElement("a");
+    //   a.href = url;
+    //   a.download = "mask.png";
+    //   document.body.appendChild(a);
+    //   a.click();
+    //   document.body.removeChild(a);
+    //   URL.revokeObjectURL(url);
+    // });
     // Convert to base64
     return canvas.toDataURL("image/png");
   };
