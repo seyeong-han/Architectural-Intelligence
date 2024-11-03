@@ -132,16 +132,22 @@ export default function ChatTestPage() {
 
         console.log("currentImage: ", currentImage);
 
-        const encodedImage = await encodeBlobToBase64(currentImage.imageURL);
+        const base64Data = currentImage.base64Data.split(",")[1];
 
-        const response = await axios.post(`${API_BASE_URL}/generate-image`, {
-          prompt,
-          input_image: encodedImage,
-          run_mode: intention,
-          seed,
-        });
-
-        console.log(response.data);
+        const response = await axios.post(
+          `${API_BASE_URL}/generate-image`,
+          {
+            prompt,
+            input_image: base64Data,
+            run_mode: intention,
+            seed,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const newGeneratedImage = response.data.image
           ? `data:image/png;base64,${response.data.image}`
@@ -151,16 +157,17 @@ export default function ChatTestPage() {
           throw new Error("No image was generated");
         }
 
+        const newImages = [
+          {
+            id: crypto.randomUUID(),
+            base64Data: newGeneratedImage,
+          },
+        ];
+
         setImageItems((prevItems) => {
-          const newItems = [...prevItems];
-          newItems[currentImageIndex] = {
-            ...newItems[currentImageIndex],
-            generated: [
-              ...newItems[currentImageIndex].generated,
-              newGeneratedImage,
-            ],
-          };
-          return newItems;
+          const updatedItems = [...prevItems, ...newImages];
+          setCurrentImageIndex(updatedItems.length - 1);
+          return updatedItems;
         });
 
         addBotMessage("Here! We generated for you!");
@@ -177,19 +184,21 @@ export default function ChatTestPage() {
   const handleFileUpload = useCallback(
     async (files) => {
       try {
-        const newImages = files.map((file) => ({
-          id: crypto.randomUUID(),
-          imageURL: URL.createObjectURL(file),
-          file,
-          generated: [
-            {
-              src: URL.createObjectURL(file),
-              alt: "original image",
-            },
-          ],
-          genCurrentIndex: 0,
-          roomType: "",
-        }));
+        const newImages = await Promise.all(
+          files.map(async (file) => {
+            const reader = new FileReader();
+            const base64Promise = new Promise((resolve) => {
+              reader.onload = () => resolve(reader.result);
+              reader.readAsDataURL(file);
+            });
+            const base64Data = await base64Promise;
+
+            return {
+              id: crypto.randomUUID(),
+              base64Data: base64Data,
+            };
+          })
+        );
 
         setImageItems((prevItems) => {
           const updatedItems = [...prevItems, ...newImages];
