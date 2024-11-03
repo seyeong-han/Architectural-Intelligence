@@ -128,29 +128,75 @@ export default function ChatTestPage() {
   );
 
 
-    setImageItems((prevItems) => {
-      const updatedImageItems = [...prevItems, ...newImages];
-      setCurrentImageIndex(updatedImageItems.length - 1);
 
-      setMessages([
-        ...messages,
-        {
-          content: `We successfully uploaded ${files.length} image(s)`,
-          sender: "bot",
-        },
-      ]);
+  const handleFileUpload = useCallback(
+    async (files) => {
+      try {
+        const newImages = files.map((file) => ({
+          id: crypto.randomUUID(),
+          imageURL: URL.createObjectURL(file),
+          file,
+          generated: [
+            {
+              src: URL.createObjectURL(file),
+              alt: "original image",
+            },
+          ],
+          genCurrentIndex: 0,
+          roomType: "",
+        }));
 
-      return updatedImageItems;
-    });
-  };
+        setImageItems((prevItems) => {
+          const updatedItems = [...prevItems, ...newImages];
+          setCurrentImageIndex(updatedItems.length - 1);
+          return updatedItems;
+        });
 
-  const handleFileChange = async (event) => {
-    const { files } = event.target;
-    if (!files || files.length === 0) {
-      return;
+        addBotMessage(
+          `Successfully uploaded ${files.length} image(s). You can now ask me to style them!`
+        );
+      } catch (error) {
+        console.error("Error uploading files:", error);
+        addBotMessage("Failed to upload images. Please try again.");
+      }
+    },
+    [addBotMessage]
+  );
+
+  const handleFileChange = useCallback(
+    async (event) => {
+      const { files } = event.target;
+      if (files?.length) {
+        await handleFileUpload(Array.from(files));
+      }
+    },
+    [handleFileUpload]
+  );
+
+  // Handle first visit
+  useEffect(() => {
+    if (isFirstVisit) {
+      handleSendMessage(INITIAL_MESSAGE)
+        .then(() => setIsFirstVisit(false))
+        .catch(console.error);
     }
-    await handleFileUpload(Array.from(files));
-  };
+  }, [isFirstVisit, handleSendMessage]);
+
+  // Cleanup URLs on unmount
+  useEffect(() => {
+    return () => {
+      imageItems.forEach((item) => {
+        if (item.imageURL) {
+          URL.revokeObjectURL(item.imageURL);
+        }
+        item.generated?.forEach((gen) => {
+          if (gen.src) {
+            URL.revokeObjectURL(gen.src);
+          }
+        });
+      });
+    };
+  }, [imageItems]);
 
   return (
     <div className="flex h-screen w-full bg-gray-100">
