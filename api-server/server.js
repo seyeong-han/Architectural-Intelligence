@@ -133,7 +133,7 @@ app.post("/api/generate-image", async (req, res) => {
   } else if (runMode === "segment") {
     img2imgPayload = {
       ...commonPayload,
-      steps: body.steps || 15,
+      steps: body.steps || 20,
       denoising_strength: body.denoising_strength || 1.0,
       alwayson_scripts: {
         ControlNet: {
