@@ -166,16 +166,28 @@ export default function Design() {
           throw new Error("No image selected");
         }
 
-        const base64Data = currentImage.base64Data.split(",")[1];
+
+        let payload;
+        if (intention === "inpaint") {
+          payload = {
+            prompt,
+            input_image: base64Data,
+            mask_image: extractMask(),
+            run_mode: "inpaint",
+            seed,
+          };
+        } else {
+          payload = {
+            prompt,
+            input_image: base64Data,
+            run_mode: "segment",
+            seed,
+          };
+        }
 
         const response = await axios.post(
           `${API_BASE_URL}/generate-image`,
-          {
-            prompt,
-            input_image: base64Data,
-            run_mode: intention,
-            seed,
-          },
+          payload,
           {
             headers: {
               "Content-Type": "application/json",
@@ -286,6 +298,49 @@ export default function Design() {
     };
   }, [imageItems]);
 
+  const extractMask = () => {
+    if (!stageRef.current) return null;
+
+    const layer = linesLayerRef.current;
+    const width = layer.width();
+    const height = layer.height();
+
+    // Create temporary canvas for mask
+    const canvas = document.createElement("canvas");
+    // canvas.width = 832;
+    // canvas.height = 640;
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+
+    // Fill with black background
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw white lines
+    ctx.strokeStyle = "white";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    const lineLayer = linesLayerRef.current;
+    const lineLayerCanvas = lineLayer.toCanvas();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(lineLayerCanvas, 0, 0);
+
+    canvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "mask.png";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+    // Convert to base64
+    return canvas.toDataURL("image/png");
+  };
+
   return (
     <div className="flex h-screen w-full bg-gray-100">
       <LeftSidebar />
@@ -297,6 +352,10 @@ export default function Design() {
         setCurrentImageIndex={setCurrentImageIndex}
         generateStyle={generateStyle}
         selectedTool={selectedTool}
+        stageRef={stageRef}
+        linesLayerRef={linesLayerRef}
+        lines={lines}
+        setLines={setLines}
       />
       <RightSidebar
         loading={loading}
