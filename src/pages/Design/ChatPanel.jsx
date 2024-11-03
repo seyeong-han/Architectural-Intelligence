@@ -70,10 +70,9 @@ const ChatPanel = ({ messages, handleSendMessage }) => {
                 >
                   {msg.contentType === "PlainText" ? (
                     <p
-                      className={`
-                  text-sm leading-relaxed text-gray-800
-                  ${msg.sender === "bot" ? "text-left" : "text-right"}
-                `}
+                      className={
+                        "text-sm leading-relaxed text-gray-800 text-left"
+                      }
                     >
                       {msg.content}
                     </p>
