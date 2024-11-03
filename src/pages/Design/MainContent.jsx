@@ -15,7 +15,7 @@ export default function MainContent({
       <div className="flex-grow bg-white m-4 rounded-3xl shadow-md flex items-center justify-center">
         {imageItems.length > 0 ? (
           <img
-            src={imageItems[currentImageIndex].generated.slice(-1)[0].src}
+            src={imageItems[currentImageIndex].base64Data}
             alt="Uploaded"
             className="max-w-full max-h-full"
           />

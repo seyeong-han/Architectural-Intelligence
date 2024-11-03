@@ -11,7 +11,7 @@ export default function Thumbnail({ imageItems, setCurrentImageIndex }) {
             onClick={() => setCurrentImageIndex(i)}
           >
             <img
-              src={imageItem.generated.slice(-1)[0].src}
+              src={imageItem.base64Data}
               alt={`Generated ${i}`}
               className="w-full h-full object-cover rounded-md"
             />
