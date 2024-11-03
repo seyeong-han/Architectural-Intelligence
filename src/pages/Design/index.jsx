@@ -11,7 +11,7 @@ const API_BASE_URL = "http://localhost:5000/api";
 const generateChatResponse = async (userPrompt) => {
   try {
     const { data } = await axios.post(`${API_BASE_URL}/generate`, {
-      model: "llama3.2",
+      model: "llama3.2:1b",
       messages: [
         {
           role: "system",
