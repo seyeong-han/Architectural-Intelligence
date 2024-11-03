@@ -41,8 +41,8 @@ const ChatPanel = ({ loading, messages, handleSendMessage }) => {
   }, [messages]);
 
   const clickSendMessage = async () => {
-    await handleSendMessage(message);
     setMessage("");
+    await handleSendMessage(message);
   };
 
   useEffect(() => {
