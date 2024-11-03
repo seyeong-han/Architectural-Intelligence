@@ -19,7 +19,7 @@ const Home = () => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen">
       <header className="absolute inset-x-0 top-0 z-10 py-4 bg-transparent sm:py-5">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <nav className="flex items-center justify-between">
@@ -50,60 +50,16 @@ const Home = () => {
               </button>
             </div>
 
-            <div className="hidden lg:flex lg:items-center lg:justify-start lg:ml-16 lg:mr-auto lg:space-x-10">
-              <a href="#" className={commonStyles.link}>
-                Features
-              </a>
-              <a href="#" className={commonStyles.link}>
-                Pricing
-              </a>
-              <a href="#" className={commonStyles.link}>
-                Support
-              </a>
-            </div>
-
             <div className="hidden lg:flex">
               <a
                 href="#"
                 className={`${commonStyles.button} text-white bg-gray-900 hover:bg-gray-700 focus:ring-gray-900`}
                 role="button"
               >
-                Get Design Inspirations
+                AI Remodeler
               </a>
             </div>
           </nav>
-
-          {expanded && (
-            <nav className=" bg-slate-200 rounded-md pt-8 px-3 pb-4">
-              <div className="grid gap-y-6">
-                <a
-                  href="#"
-                  className={`${commonStyles.link} flex items-center`}
-                >
-                  Features
-                </a>
-                <a
-                  href="#"
-                  className={`${commonStyles.link} flex items-center`}
-                >
-                  Pricing
-                </a>
-                <a
-                  href="#"
-                  className={`${commonStyles.link} flex items-center`}
-                >
-                  Support
-                </a>
-                <a
-                  href="#"
-                  className={`${commonStyles.button} text-white bg-gray-900 border-transparent hover:bg-gray-600`}
-                  role="button"
-                >
-                  Get Design Inspiration
-                </a>
-              </div>
-            </nav>
-          )}
         </div>
       </header>
 
@@ -121,12 +77,9 @@ const Home = () => {
         <div className="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
           <div className="flex">
             <div className="w-full md:max-w-xs lg:max-w-md">
-              <h1 className={commonStyles.sectionTitle}>
-                Explore the Future with AuraUI
-              </h1>
+              <h1 className={commonStyles.sectionTitle}>AI meets Renovation</h1>
               <p className={commonStyles.sectionSubtitle}>
-                Stay updated with the latest in web3 and decentralized finance.
-                Discover new opportunities and insights with our weekly updates.
+                Transform your home with our AI-powered remodeling tool.
               </p>
 
               <p className="mt-10 text-base font-bold text-gray-900">
@@ -136,19 +89,19 @@ const Home = () => {
                 <li className={commonStyles.listItem}>
                   <AiOutlineArrowRight className={commonStyles.listItemIcon} />
                   <span className={commonStyles.listItemText}>
-                    Receive Weekly Updates on Web3 Innovations
+                    Interactive Design and Remodeling Tools
                   </span>
                 </li>
                 <li className={commonStyles.listItem}>
                   <AiOutlineArrowRight className={commonStyles.listItemIcon} />
                   <span className={commonStyles.listItemText}>
-                    Get Exclusive Access to New Features and Resources
+                    Transform Your Home with AI style generation
                   </span>
                 </li>
                 <li className={commonStyles.listItem}>
                   <AiOutlineArrowRight className={commonStyles.listItemIcon} />
                   <span className={commonStyles.listItemText}>
-                    Be Featured in Our Spotlight Stories
+                    Replace your old furniture with AI-generated designs
                   </span>
                 </li>
               </ul>
@@ -160,7 +113,7 @@ const Home = () => {
                   className={commonStyles.gradientButton}
                   role="button"
                 >
-                  Join Newsletter For Free
+                  Get Started!!
                 </a>
               </div>
             </div>
