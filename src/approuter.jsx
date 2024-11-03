@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import "@aws-amplify/ui-react/styles.css";
 
 import Home from "./pages/Home";
 import Design from "./pages/Design";
