@@ -28,7 +28,6 @@ const generateChatResponse = async (userPrompt) => {
       ],
       stream: false,
     });
-    console.log("data: ", data);
 
     return JSON.parse(data.message.content);
   } catch (error) {
@@ -75,13 +74,9 @@ export default function ChatTestPage() {
           ]);
         }
 
-        console.log("imageItems: ", imageItems);
-
         // Only generate chat response if there's an image uploaded
         if (imageItems.length > 0) {
           const chatResponse = await generateChatResponse(message);
-
-          console.log("chatResponse: ", chatResponse);
 
           if (chatResponse?.message) {
             const intention = chatResponse.intention;
@@ -129,8 +124,6 @@ export default function ChatTestPage() {
         if (!currentImage) {
           throw new Error("No image selected");
         }
-
-        console.log("currentImage: ", currentImage);
 
         const base64Data = currentImage.base64Data.split(",")[1];
 
