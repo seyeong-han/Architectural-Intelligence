@@ -17,8 +17,38 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Single JSON parser with consistent limit
+app.use(
+  express.json({
+    limit: "200mb",
+    extended: true,
+  })
+);
+
+app.use(
+  express.urlencoded({
+    limit: "200mb",
+    extended: true,
+  })
+);
+
+// Axios configuration
+axios.defaults.maxContentLength = 200 * 1024 * 1024;
+axios.defaults.maxBodyLength = 200 * 1024 * 1024;
+
 // Specific preflight for large payloads
 app.options("/api/generate-image", cors(corsOptions));
+
+// Error handler
+app.use((err, req, res, next) => {
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({
+      error: "Payload too large",
+      message: "The uploaded file exceeds the size limit",
+    });
+  }
+  next(err);
+});
 const OLLAMA_API_URL = "http://localhost:11434";
 const STABLE_DIFFUSION_URL = "http://127.0.0.1:7860";
 const NEGATIVE_PROMPT =
